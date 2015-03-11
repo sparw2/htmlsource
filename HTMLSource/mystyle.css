@@ -1,0 +1,24 @@
+table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+  }
+  th, td {
+      padding: 5px;
+      text-align: left;
+  }
+#top {
+padding: 10px;
+}
+
+#left {
+    float:left;
+    width: 30%;
+	height: 100%;
+	padding: 10px;
+}
+#right {
+	float:left;
+	width: 50%;
+	height: 100%;
+	padding: 10px;
+}

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>HTML Source</title>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <link rel="stylesheet" type="text/css" href="mystyle.css">
+</head>
+<body>
+<div id="top">
+ 	URL  <input id="url" type="text" size="50"> <input id="submit" type="button" value="Submit">
+</div>
+
+	<div id="left">
+		<div id="summary">
+			<p>HTML Summary</p>
+			<table id="summaryTable"></table>
+		</div>
+	</div>
+
+	<div id="right">
+		 <p>HTML Source</p>
+		 <div id="htmlSource"></div>
+	</div>
+<script>
+
+$( document ).ajaxError(function() {
+    alert("Please enter a valid url");
+});
+
+$("#submit").click(function(){
+   var url = $( "#url" ).val();
+   if (!url){
+     alert("Please enter a valid url");
+     return;
+   }
+    $.post("/url/summary?url="+url, function(data, status){
+		   $("#summaryTable").find("tr").remove();
+		   var trHTML = '<tr><td>Tag</td><td>Count</td></tr>';
+			 $.each( data, function( key, val ) {
+				trHTML += '<tr id='+key+'><td>' + key + '</td><td>' + val + '</td></tr>';
+			 });
+
+        	$('#summaryTable').append(trHTML);
+
+			//set the click handler for each tags
+			$('tr').not(':first').click(function (event) {
+				  console.log("/url/html?url="+url+"&tag="+$(this).attr('id'));
+				  $.post("/url/html?url="+url+"&tag="+$(this).attr('id'), function(data, status){
+					$("#htmlSource").empty();
+					$("#htmlSource").html(data);
+				 });
+			});
+
+
+			$.post("/url/html?url="+url, function(data, status){
+					$("#htmlSource").empty();
+					$("#htmlSource").html(data);
+    		});
+    });
+});
+
+
+
+</script>
+
+</body>
+</html>
